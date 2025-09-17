@@ -1,68 +1,76 @@
 #include "GorshkovGroup.h"
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <locale>
+#include <codecvt>
 
 void GorshkovGroup::addStudent()
 {
 	GorshkovStudent* newStudent = new GorshkovStudent();
 	newStudent->SetStudent();
 	Students.push_back(newStudent);
-	cout << "New student added succesfully!" << endl;
+	wcout << "New student added succesfully!" << endl;
 }
 
 void GorshkovGroup::displayAllStudents()
 {
 	if (Students.empty()) {
-		cout << "Group empty" << endl;
+		wcout << "Group empty" << endl;
 	}
 	else {
-		for (size_t i = 0; i < Students.size(); i++) {
-			cout << "Student #" << i + 1 << ":" << endl;
-			Students[i]->DisplayStudent();
+		for (const auto* student : Students) {
+			student->DisplayStudent();
 		}
 	}
 }
 
-void GorshkovGroup::readFromFile(const string& filename)
+void GorshkovGroup::readFromFile(const wstring& filename)
 {
-	ifstream inFile(filename);
+	wifstream inFile(filename);
 	if (!inFile) {
-		cout << "Error opening file" << endl;
+		wcerr << L"Error opening file" << endl;
 		return;
 	}
-	while (inFile && !inFile.eof()) {
+	inFile.imbue(std::locale(std::locale(), new std::codecvt_utf8<wchar_t>));
+	
+	int count = 0;
+	inFile >> count;
+	for (int i = 0; i < count; ++i) {
 		GorshkovStudent* newStudent = new GorshkovStudent();
 		newStudent->readFromFile(inFile);
-		if (inFile) {
-			Students.push_back(newStudent);
-		}
-		else {
-			delete newStudent;
-		}
+		Students.push_back(newStudent);
 	}
 
 	inFile.close();
-	cout << "Data loaded succesfully!" << endl;
+	wcout << L"Data loaded succesfully!" << endl;
 }
 
-void GorshkovGroup::writeToFile(const string& filename)
+void GorshkovGroup::writeToFile(const wstring& filename) const
 {
-	ofstream outFile(filename);
+	wofstream outFile(filename);
 	if (!outFile) {
-		cout << "Error opening file" << endl;
+		wcerr << L"Error opening file" << endl;
 		return;
 	}
-	for (const auto& student : Students) {
+
+	outFile.imbue(locale(locale(), new codecvt_utf8<wchar_t>));
+
+	outFile << Students.size() << std::endl;
+	for (const auto* student : Students) {
 		student->writeToFile(outFile);
 	}
 	outFile.close();
-	cout << "Data saved succesfully!" << endl;
+	wcout << "Data saved succesfully!" << endl;
 }
 
 void GorshkovGroup::clear()
 {
+	for (auto* student : Students) {
+		delete student;
+	}
 	Students.clear();
-	cout << "Data cleaned!" << endl;
+	wcout << "Data cleaned!" << endl;
 }
 
 

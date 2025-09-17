@@ -2,60 +2,43 @@
 #include <iostream>
 #include <fstream>
 
-GorshkovStudent::GorshkovStudent() : name(""), age(0), group("") {}
-
-GorshkovStudent::GorshkovStudent(const string& n, const int& a, const string& g) : name(n), age(a), group(g) {}
+GorshkovStudent::GorshkovStudent() : age(0) {}
 
 void GorshkovStudent::SetStudent()
 {
-	cout << "Enter name: ";
-	getline(cin, name);
+	wcout << "Enter name: ";
+	getline(wcin >> ws, name);
 	
 
-	cout << "Enter age: ";
-	cin >> age;
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	wcout << "Enter age: ";
+	wcin >> age; 
+	wcin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-	cout << "Enter group: ";
-	getline(cin, group);
+	wcout << "Enter group: ";
+	getline(wcin, group);
 
 }
 
 void GorshkovStudent::DisplayStudent() const
 {
-	cout << "Name: " << name << endl;
-	cout << "Age: " << age << endl;
-	cout << "Group: " << group << endl;
-	cout << "-------------------" << endl;
+	wcout << "Name: " << name << endl;
+	wcout << "Age: " << age << endl;
+	wcout << "Group: " << group << endl;
+	wcout << "-------------------" << endl;
 }
 
-void GorshkovStudent::readFromFile(ifstream& inFile)
+void GorshkovStudent::readFromFile(wifstream& inFile)
 {
-	getline(inFile, name);
+	getline(inFile >> ws, name);
 	inFile >> age;
 	inFile.ignore(numeric_limits<streamsize>::max(), '\n');
-	getline(inFile, group);
+	getline(inFile >> ws, group);
 }
 
-void GorshkovStudent::writeToFile(ofstream& outFile)
+void GorshkovStudent::writeToFile(wofstream& outFile) const
 {
 	outFile << name << endl;
 	outFile << age << endl;
 	outFile << group << endl;
-}
-
-string GorshkovStudent::GetName() const
-{
-	return name;
-}
-
-int GorshkovStudent::GetAge() const
-{
-	return age;
-}
-
-string GorshkovStudent::GetGroup() const
-{
-	return group;
 }
 

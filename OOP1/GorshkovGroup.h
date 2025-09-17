@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 #include "Student.h"
 
 class GorshkovGroup
@@ -12,8 +13,8 @@ public:
 
 	void addStudent();
 	void displayAllStudents();
-	void readFromFile(const string& filename);
-	void writeToFile(const string& filename);
+	void readFromFile(const wstring& filename);
+	void writeToFile(const wstring& filename) const;
 	void clear();
 };
 

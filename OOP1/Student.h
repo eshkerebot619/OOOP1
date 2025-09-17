@@ -1,26 +1,21 @@
 #pragma once
 #include <string>
-#include <vector>
+#include <fstream>
 using namespace std;
 
 class GorshkovStudent
 {
 private:
-	string name;
+	wstring name;
 	int age;
-	string group;
+	wstring group;
 public:
 	GorshkovStudent();
-	GorshkovStudent(const string& n, const int& a, const string& group);
 
 	void SetStudent();
 	void DisplayStudent() const;
 
-	void readFromFile(ifstream& inFile);
-	void writeToFile(ofstream& outFile);
-
-	string GetName() const;
-	int GetAge() const;
-	string GetGroup() const;	
+	void readFromFile(wifstream& inFile);
+	void writeToFile(wofstream& outFile) const;
 };
 
