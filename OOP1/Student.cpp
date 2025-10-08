@@ -6,25 +6,24 @@ GorshkovStudent::GorshkovStudent() : age(0) {}
 
 void GorshkovStudent::SetStudent()
 {
-	wcout << "Enter name: ";
+	wcout << L"Введите имя: ";
 	getline(wcin >> ws, name);
 	
 
-	wcout << "Enter age: ";
+	wcout << L"Введите возраст: ";
 	wcin >> age; 
 	wcin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-	wcout << "Enter group: ";
+	wcout << L"Введите группу: ";
 	getline(wcin, group);
 
 }
 
 void GorshkovStudent::DisplayStudent() const
 {
-	wcout << "Name: " << name << endl;
-	wcout << "Age: " << age << endl;
-	wcout << "Group: " << group << endl;
-	wcout << "-------------------" << endl;
+	wcout << L"Имя: " << name << endl;
+	wcout << L"Возраст: " << age << endl;
+	wcout << L"Группа: " << group << endl;
 }
 
 void GorshkovStudent::readFromFile(wifstream& inFile)

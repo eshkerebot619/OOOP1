@@ -4,19 +4,23 @@
 #include <vector>
 #include <io.h>
 #include <fcntl.h>
+#include <locale>
 #include "Student.h"
 #include "GorshkovGroup.h"
+#include "GorshkovStarosta.h"
+
 using namespace std;
 
 void DisplayMenu() {
-    wcout << "-------------------" << endl;
-    wcout << "1.Add student" << endl;
-    wcout << "2.Show all students" << endl;
-    wcout << "3.Load students from file" << endl;
-    wcout << "4.Save students into file" << endl;
-    wcout << "5.Clear students" << endl;
-    wcout << "0.Exit" << endl;
-    wcout << "Enter your choice: ";
+    wcout << L"-------------------" << endl;
+    wcout << L"1.Добавить студента" << endl;
+    wcout << L"2.Добавить старосту" << endl;
+    wcout << L"3.Отобразить всех студентов" << endl;
+    wcout << L"4.Загрузить данные из файла" << endl;
+    wcout << L"5.Сохранить данные в файл" << endl;
+    wcout << L"6.Очистить студентов" << endl;
+    wcout << L"0.Выход" << endl;
+    wcout << L"Ваш выбор: ";
 }
 
 int main()
@@ -35,7 +39,6 @@ int main()
 
     int choice;
     GorshkovGroup Group;
-    GorshkovStudent Student;
     do {
         DisplayMenu();
         wcin >> choice;
@@ -47,23 +50,26 @@ int main()
             Group.addStudent();
             break;
         case 2:
+            Group.addStarosta();
+            break;
+        case 3:
             Group.displayAllStudents();
             break;
-        case 3: {
+        case 4: {
             wstring filename;
-            wcout << L"Enter filename: ";
+            wcout << L"Введите название файла: ";
             getline(wcin, filename);
             Group.readFromFile(filename);
             break;
         }
-        case 4: {
+        case 5: {
             wstring filename;
-            wcout << L"Enter filename:  ";
+            wcout << L"Введите название файла:  ";
             getline(wcin, filename);
             Group.writeToFile(filename);
             break;
         }
-        case 5: {
+        case 6: {
             Group.clear();
             break;
         }
@@ -71,5 +77,6 @@ int main()
             break;
         }
     } while (choice != 0);
+    return 0;
 }
 

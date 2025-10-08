@@ -4,73 +4,99 @@
 #include <vector>
 #include <locale>
 #include <codecvt>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/shared_ptr.hpp>
+#include <boost/serialization/export.hpp>
+
+BOOST_CLASS_EXPORT_GUID(GorshkovStudent, "GorshkovStudent")
 
 void GorshkovGroup::addStudent()
 {
-	GorshkovStudent* newStudent = new GorshkovStudent();
+	shared_ptr<GorshkovStudent> newStudent = make_shared<GorshkovStudent>();
 	newStudent->SetStudent();
 	Students.push_back(newStudent);
-	wcout << "New student added succesfully!" << endl;
+	wcout << L"Новый студент успешно добавлен!" << endl;
+}
+
+void GorshkovGroup::addStarosta()
+{
+	shared_ptr<GorshkovStarosta> newStarosta = make_shared<GorshkovStarosta>();
+	newStarosta->SetStudent();
+	Students.push_back(newStarosta);
+	wcout << L"Новая староста добавлена успешно!" << endl;
 }
 
 void GorshkovGroup::displayAllStudents()
 {
 	if (Students.empty()) {
-		wcout << "Group empty" << endl;
+		wcout << L"Группа пуста" << endl;
 	}
 	else {
-		for (const auto* student : Students) {
+		for (const auto& student : Students) {
 			student->DisplayStudent();
+			wcout << endl;
 		}
 	}
 }
 
 void GorshkovGroup::readFromFile(const wstring& filename)
 {
-	wifstream inFile(filename);
+	clear();
+
+	string narrowFilename(filename.begin(), filename.end());
+	ifstream inFile(narrowFilename);
 	if (!inFile) {
-		wcerr << L"Error opening file" << endl;
+		wcerr << L"Ошибка открытия файла" << endl;
 		return;
 	}
-	inFile.imbue(std::locale(std::locale(), new std::codecvt_utf8<wchar_t>));
-	
-	int count = 0;
-	inFile >> count;
-	for (int i = 0; i < count; ++i) {
-		GorshkovStudent* newStudent = new GorshkovStudent();
-		newStudent->readFromFile(inFile);
-		Students.push_back(newStudent);
+
+	try {
+		boost::archive::text_iarchive ia(inFile);
+		ia.register_type<GorshkovStudent>();
+		ia.register_type<GorshkovStarosta>();
+		ia >> *this;
+		wcout << L"Данные загружены!" << endl;
+	}
+	catch (const boost::archive::archive_exception& e) {
+		wcerr << L"Ошибка при загрузке данных: " << e.what() << endl;
+	}
+	catch (const exception& e) {
+		wcerr << L"Ошибка: " << e.what() << endl;
 	}
 
 	inFile.close();
-	wcout << L"Data loaded succesfully!" << endl;
 }
 
 void GorshkovGroup::writeToFile(const wstring& filename) const
 {
-	wofstream outFile(filename);
+	std::string narrowFilename(filename.begin(), filename.end());
+	std::ofstream outFile(narrowFilename);
 	if (!outFile) {
-		wcerr << L"Error opening file" << endl;
+		wcerr << L"Ошибка открытия файла" << endl;
 		return;
 	}
 
-	outFile.imbue(locale(locale(), new codecvt_utf8<wchar_t>));
-
-	outFile << Students.size() << std::endl;
-	for (const auto* student : Students) {
-		student->writeToFile(outFile);
+	try {
+		boost::archive::text_oarchive oa(outFile);
+		oa.register_type<GorshkovStudent>();
+		oa.register_type<GorshkovStarosta>();
+		oa << *this;
+		wcout << L"Данные сохранены!" << endl;
 	}
+	catch (const boost::archive::archive_exception& e) {
+		wcerr << L"Ошибка при сохранении данных: " << e.what() << endl;
+	}
+	catch (const std::exception& e) {
+		wcerr << L"Ошибка: " << e.what() << endl;
+	}
+
 	outFile.close();
-	wcout << "Data saved succesfully!" << endl;
 }
 
 void GorshkovGroup::clear()
 {
-	for (auto* student : Students) {
-		delete student;
-	}
 	Students.clear();
-	wcout << "Data cleaned!" << endl;
+	wcout << L"Данные очищены!" << endl;
 }
-
-
