@@ -2,15 +2,14 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
 #include <locale>
-#include <codecvt>
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/serialization/vector.hpp>
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/export.hpp>
 
-BOOST_CLASS_EXPORT_GUID(GorshkovStudent, "GorshkovStudent")
 
 void GorshkovGroup::addStudent()
 {
@@ -45,7 +44,7 @@ void GorshkovGroup::readFromFile(const wstring& filename)
 {
 	clear();
 
-	string narrowFilename(filename.begin(), filename.end());
+	string narrowFilename = string(filename.begin(), filename.end());
 	ifstream inFile(narrowFilename);
 	if (!inFile) {
 		wcerr << L"Ошибка открытия файла" << endl;
@@ -56,7 +55,7 @@ void GorshkovGroup::readFromFile(const wstring& filename)
 		boost::archive::text_iarchive ia(inFile);
 		ia.register_type<GorshkovStudent>();
 		ia.register_type<GorshkovStarosta>();
-		ia >> *this;
+		ia >> Students;
 		wcout << L"Данные загружены!" << endl;
 	}
 	catch (const boost::archive::archive_exception& e) {
@@ -71,8 +70,8 @@ void GorshkovGroup::readFromFile(const wstring& filename)
 
 void GorshkovGroup::writeToFile(const wstring& filename) const
 {
-	std::string narrowFilename(filename.begin(), filename.end());
-	std::ofstream outFile(narrowFilename);
+	string narrowFilename = string(filename.begin(), filename.end());
+	ofstream outFile(narrowFilename);
 	if (!outFile) {
 		wcerr << L"Ошибка открытия файла" << endl;
 		return;
@@ -82,7 +81,7 @@ void GorshkovGroup::writeToFile(const wstring& filename) const
 		boost::archive::text_oarchive oa(outFile);
 		oa.register_type<GorshkovStudent>();
 		oa.register_type<GorshkovStarosta>();
-		oa << *this;
+		oa << Students;
 		wcout << L"Данные сохранены!" << endl;
 	}
 	catch (const boost::archive::archive_exception& e) {

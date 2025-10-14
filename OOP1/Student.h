@@ -31,8 +31,6 @@ public:
 	virtual void SetStudent();
 	virtual void DisplayStudent() const;
 
-	virtual void readFromFile(wifstream& inFile);
-	virtual void writeToFile(wofstream& outFile) const;
 };
 
-BOOST_SERIALIZATION_ASSUME_ABSTRACT(GorshkovStudent)
+BOOST_CLASS_EXPORT_KEY(GorshkovStudent)

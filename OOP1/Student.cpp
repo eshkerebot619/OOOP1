@@ -1,6 +1,8 @@
 #include "Student.h"
 #include <iostream>
 #include <fstream>
+#include <limits>
+#include <boost/serialization/export.hpp>
 
 GorshkovStudent::GorshkovStudent() : age(0) {}
 
@@ -26,18 +28,4 @@ void GorshkovStudent::DisplayStudent() const
 	wcout << L"Ãðóïïà: " << group << endl;
 }
 
-void GorshkovStudent::readFromFile(wifstream& inFile)
-{
-	getline(inFile >> ws, name);
-	inFile >> age;
-	inFile.ignore(numeric_limits<streamsize>::max(), '\n');
-	getline(inFile >> ws, group);
-}
-
-void GorshkovStudent::writeToFile(wofstream& outFile) const
-{
-	outFile << name << endl;
-	outFile << age << endl;
-	outFile << group << endl;
-}
-
+BOOST_CLASS_EXPORT_IMPLEMENT(GorshkovStudent)

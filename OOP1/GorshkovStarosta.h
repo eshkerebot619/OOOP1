@@ -25,8 +25,6 @@ public:
     void SetStudent() override;
     void DisplayStudent() const override;
 
-    void readFromFile(wifstream& inFile) override;
-    void writeToFile(wofstream& outFile) const override;
 };
 
 BOOST_CLASS_EXPORT_KEY(GorshkovStarosta)
